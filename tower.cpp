@@ -40,7 +40,7 @@ void Tower::attack()
       if(typeid(*(colliding_items[i]))==typeid (MyPlayer)){
          // Game::getInstance().vida->setPlainText(QString::number(Socket::getInstance().vida-1));
               Game::getInstance().player->vida--;
-              Socket::getInstance().vida=Socket::getInstance().vida--;
+              Game::getInstance().player->vida;
               cout<<"SE RESTA VIDA";
               if (Game::getInstance().player->vida<=0){
                   cout << "Player dead T1" << endl;

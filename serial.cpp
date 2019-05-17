@@ -139,7 +139,13 @@ void serial::deserealizarTableroGladiador(string json,int arr[10][10], int* edad
 
 
 }
+void serial::deserializarGrafico(string json, string *grafico1, string *grafico2){
+    Document d;
+    d.Parse(json.c_str());
+    *grafico1 = d["grafico"].GetString();
+    *grafico2 = d["grafico2"].GetString();
 
+}
 string serial::serializarTurno(bool play, int turno, bool mod3 )
 {
     const char* json = "{\"play\":true,"

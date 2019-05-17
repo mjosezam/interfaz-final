@@ -28,6 +28,7 @@ public:
   MyPlayer *player,*player1, *player2;
   Stadistics *mode,*time_in,*vida,*vida2,*id,*edad,*prob,*gen,*emocion,*superior,*inferior,*resistencia,*fisica,*fitness;
   QTimer *timer;
+  Stadistics *one,*two,*three,*four,*five,*six,*seven,*eight,*nine,*ten,*eleven;
   int matriz[10][10];
   int i=0;
   void mainButtons();

@@ -24,6 +24,7 @@ public:
     int *supervivenciaGenBack, int aStar[30][2], int backTrack[30][2]);
     string serializarTurno(bool play, int turno, bool mod3);
     void deserializarIteracion3(string json, int arr[10][10], int *edad, int *edadBack, int *emocional, int *emocionalBack, int *condicionFisica, int *condicionFisicaBack, int *resistencia, int *resistenciaBack, int *velocidad, int *velocidadBack, int *generacion, int *generacionBack, int *id, int *idBack, int *vida, int *vidaBack, int *fitness, int *fitnessBack, int *probabilidad, int *probabilidadBack, int *troncoSuperior, int *troncoSuperiorBack, int *troncoInferior, int *troncoInferiorBack, int *supervivenciaGen, int *supervivenciaGenBack, int aStar[30][2], int backTrack[30][2], int ubicacion[2]);
+    void deserializarGrafico(string json, string *grafico1, string *grafico2);
 };
 
 #endif // SERIAL_H

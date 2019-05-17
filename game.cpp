@@ -18,6 +18,10 @@
 #include <sockets.h>
 #include <iostream>
 #include <QApplication>
+#include <QtCharts/QBarSet>
+#include <QtCharts/QBarSeries>
+#include <QtCharts>
+
 using namespace std;
 Game::Game()
 {
@@ -86,125 +90,244 @@ string Game::clear(string recibido, int ubicacion[2]){
 void Game::start()
 {
     while(Socket::getInstance().play){
-      scene->clear();
-      player = new MyPlayer();
-      player1 = new MyPlayer();
-      player2 = new MyPlayer();
-      player1->setPixmap(QPixmap(":/images/try1.png"));
-      player2->setPixmap(QPixmap(":/images/try.png"));
+          scene->clear();
+          player = new MyPlayer();
+          player1 = new MyPlayer();
+          player2 = new MyPlayer();
+          player1->setPixmap(QPixmap(":/images/try1.png"));
+          player2->setPixmap(QPixmap(":/images/try.png"));
 
-      scene->addItem(player1);
-      scene->addItem(player2);
-      player1->setFlag(QGraphicsItem::ItemIsFocusable);
-      player1->setPos(64,64);
-      player1->setFocus();
-      player2->setFlag(QGraphicsItem::ItemIsFocusable);
-      player2->setPos(64,64);
-      player2->setFocus();
+          scene->addItem(player1);
+          scene->addItem(player2);
+          player1->setFlag(QGraphicsItem::ItemIsFocusable);
+          player1->setPos(64,64);
+          player1->setFocus();
+          player2->setFlag(QGraphicsItem::ItemIsFocusable);
+          player2->setPos(64,64);
+          player2->setFocus();
 
 
-      string json = "";
-      string mensaje = serial::getInstance().serializarTurno(player->active,Socket::getInstance().turno,false);
-      string recibido = Socket::getInstance().envioEscucho(mensaje, 8080, "192.168.0.111");
-      qDebug()<<recibido.c_str();
-      serial::getInstance().deserealizarTableroGladiador(recibido.c_str(), matriz, &player1->edad,&player2->edad,&player1->emocional,&player2->emocional,&player1->condicionFisica,&player2->condicionFisica
-                                                                  , &player1->resistencia,&player2->resistencia,&player1->velocidad,&player2->velocidad,&player1->generacion,&player2->generacion,&player1->id, &player2->id,
-                                                                    &player1->vida,&player2->vida,&player1->fitness,&player2->fitness,&player1->probabilidad,&player2->probabilidad,&player1->troncoSuperior, &player2->troncoSuperior,
-                                                                    &player1->troncoInferior,&player2->troncoInferior,
-                                                                  &player1->supervivenciaGen,&player2->supervivenciaGen,player1->arr,player2->arr);
+          string json = "";
+          string mensaje = serial::getInstance().serializarTurno(player->active,1,false);
+          string recibido = Socket::getInstance().envioEscucho(mensaje, 8080, "192.168.0.111");
+          qDebug()<<recibido.c_str();
+          serial::getInstance().deserealizarTableroGladiador(recibido.c_str(), matriz, &player1->edad,&player2->edad,&player1->emocional,&player2->emocional,&player1->condicionFisica,&player2->condicionFisica
+                                                                      , &player1->resistencia,&player2->resistencia,&player1->velocidad,&player2->velocidad,&player1->generacion,&player2->generacion,&player1->id, &player2->id,
+                                                                        &player1->vida,&player2->vida,&player1->fitness,&player2->fitness,&player1->probabilidad,&player2->probabilidad,&player1->troncoSuperior, &player2->troncoSuperior,
+                                                                        &player1->troncoInferior,&player2->troncoInferior,
+                                                                      &player1->supervivenciaGen,&player2->supervivenciaGen,player1->arr,player2->arr);
 
-      mode = new Stadistics();
-      mode->set(0,850,11,25);
-      mode->setPlainText(QString("Gladiador A*"));
-      scene->addItem(mode);
+          one = new Stadistics();
+          one->set(0,800,180,15);
+          one->setPlainText(QString("Vida: "));
+          scene->addItem(one);
 
-      vida = new Stadistics();
-      vida->set(player1->vida,850,180,20);
-      //vida->setPlainText(QString("Vida: ")+QString(player1->vida));
-      scene->addItem(vida);
+          two = new Stadistics();
+          two->set(0,800,220,15);
+          two->setPlainText(QString("ID: "));
+          scene->addItem(two);
 
-      id = new Stadistics();
-      id->set(player1->id,850,220,15);
-      scene->addItem(id);
+          three = new Stadistics();
+          three->set(0,800,240,15);
+          three->setPlainText(QString("Edad: "));
+          scene->addItem(three);
 
-      edad = new Stadistics();
-      edad->set(player1->edad,850,240,15);
-      scene->addItem(edad);
+          four = new Stadistics();
+          four->set(0,800,260,15);
+          four->setPlainText(QString("Probabilidad: "));
+          scene->addItem(four);
 
-      prob = new Stadistics();
-      prob->set(player1->probabilidad,850,260,15);
-      scene->addItem(prob);
+          five = new Stadistics();
+          five->set(0,800,280,10);
+          five->setPlainText(QString("Supervivencia Gen: "));
+          scene->addItem(five);
 
-      gen = new Stadistics();
-      gen->set(player1->supervivenciaGen,850,280,15);
-      scene->addItem(gen);
+          six = new Stadistics();
+          six->set(0,800,300,15);
+          six->setPlainText(QString("Emocional: "));
+          scene->addItem(six);
 
-      emocion  = new Stadistics();
-      emocion->set(player1->emocional,850,300,15);
-      scene->addItem(emocion);
+          seven = new Stadistics();
+          seven->set(0,800,320,15);
+         seven->setPlainText(QString("Tronco Sup: "));
+          scene->addItem(seven);
 
-      superior = new Stadistics();
-      superior->set(player1->troncoSuperior,850,320,15);
-      scene->addItem(superior);
+          eight = new Stadistics();
+          eight->set(0,800,340,15);
+         eight->setPlainText(QString("Tronco Inf: "));
+          scene->addItem(eight);
 
-      inferior = new Stadistics();
-      inferior->set(player1->troncoInferior,850,340,15);
-      scene->addItem(inferior);
+          nine =new Stadistics();
+          nine->set(0,800,360,15);
+          nine->setPlainText(QString("Resistencia: "));
+          scene->addItem(nine);
 
-      resistencia = new Stadistics();
-      resistencia->set(player1->resistencia,850,360,15);
-      scene->addItem(resistencia);
+          ten = new Stadistics();
+          ten->set(0,800,380,15);
+         ten->setPlainText(QString("Fisico: "));
+          scene->addItem(ten);
 
-      fisica = new Stadistics();
-      fisica->set(player1->condicionFisica,850,380,15);
-      scene->addItem(fisica);
+          eleven = new Stadistics();
+          eleven->set(0,800,400,15);
+         eleven->setPlainText(QString("Fitness: "));
+          scene->addItem(eleven);
 
-      fitness = new Stadistics();
-      fitness->set(player1->fitness,850,400,15);
-      scene->addItem(fitness);
 
-      time_in = new Stadistics();
-      time_in->set(0,545,11,35);
-      time_in->setPlainText(QString("0000"));
-      scene->addItem(time_in);
 
-      QProgressBar* GP = new QProgressBar();
-      GP->setGeometry(870,450,100,20);
-      GP->setAutoFillBackground(true);
-      GP->setValue(20);
-      scene->addWidget(GP);
+          scene->setBackgroundBrush(QBrush(QImage(":images/game.png")));
 
-      QProgressBar* GM = new QProgressBar();
-      GM->setGeometry(870,480,100,20);
-      GM->setValue(80);
-      GM->setAutoFillBackground(true);
-      scene->addWidget(GM);
+          timer = new QTimer();
+          QObject::connect(timer,SIGNAL(timeout()),this,SLOT(spawn()));
+          timer->start();
 
-      scene->setBackgroundBrush(QBrush(QImage(":images/game.png")));
+          player=player1;
 
-      timer = new QTimer();
-      QObject::connect(timer,SIGNAL(timeout()),this,SLOT(spawn()));
-      timer->start();
+          vida = new Stadistics();
+          vida->set(player->vida,950,180,20);
+          scene->addItem(vida);
 
-      player=player1;
-      Socket::getInstance().vida = player->vida;
-      cout<<Socket::getInstance().vida<<"Vida inicial"<<endl;
+          id = new Stadistics();
+          id->set(player->id,950,220,15);
+          scene->addItem(id);
 
-      player1->moveArr(player1->arr);
-      if (!Socket::getInstance().play){
-          break;
-      }
-      player=player2;
-      Socket::getInstance().vida= player->vida;
-      cout<<Socket::getInstance().vida<<"Vida inicial backtracking"<<endl;
-      player2->moveArr(player2->arr);
-      Socket::getInstance().turno++;
-      qDebug()<<Socket::getInstance().turno<<"TURNO";
-    }
-    qDebug()<<"Game Over";
+          edad = new Stadistics();
+          edad->set(player->edad,950,240,15);
+          scene->addItem(edad);
+
+          prob = new Stadistics();
+          prob->set(player->probabilidad,950,260,15);
+          scene->addItem(prob);
+
+          gen = new Stadistics();
+          gen->set(player->supervivenciaGen,950,280,15);
+          scene->addItem(gen);
+
+          emocion  = new Stadistics();
+          emocion->set(player->emocional,950,300,15);
+          scene->addItem(emocion);
+
+          superior = new Stadistics();
+          superior->set(player->troncoSuperior,950,320,15);
+          scene->addItem(superior);
+
+          inferior = new Stadistics();
+          inferior->set(player->troncoInferior,950,340,15);
+          scene->addItem(inferior);
+
+          resistencia = new Stadistics();
+          resistencia->set(player->resistencia,950,360,15);
+          scene->addItem(resistencia);
+
+          fisica = new Stadistics();
+          fisica->set(player->condicionFisica,950,380,15);
+          scene->addItem(fisica);
+
+          fitness = new Stadistics();
+          fitness->set(player->fitness,950,400,15);
+          scene->addItem(fitness);
+          Socket::getInstance().vida = player->vida;
+          cout<<Socket::getInstance().vida<<"Vida inicial"<<endl;
+
+          player1->moveArr(player1->arr);
+          if (!Socket::getInstance().play){
+              break;
+          }
+          player=player2;
+
+          vida->set(player->vida,950,180,20);
+
+          id->set(player->id,950,220,15);
+
+          edad->set(player->edad,950,240,15);
+
+          prob->set(player->probabilidad,950,260,15);
+
+          gen->set(player->supervivenciaGen,950,280,15);
+
+          emocion->set(player->emocional,950,300,15);
+
+          superior->set(player->troncoSuperior,950,320,15);
+
+          inferior->set(player->troncoInferior,950,340,15);
+
+          resistencia->set(player->resistencia,950,360,15);
+
+          fisica->set(player->condicionFisica,950,380,15);
+
+          fitness->set(player->fitness,950,400,15);
+
+
+          Socket::getInstance().vida= player->vida;
+          cout<<Socket::getInstance().vida<<"Vida inicial backtracking"<<endl;
+          player2->moveArr(player2->arr);
+          Socket::getInstance().turno++;
+          qDebug()<<Socket::getInstance().turno<<"TURNO";
+        }
+        qDebug()<<"Game Over";
+    string grafico1;
+    string grafico2;
     string mensaje = serial::getInstance().serializarTurno(false,1,false);
-    string recibido = Socket::getInstance().envioEscucho(mensaje, 8080, "192.168.0.111");
-    scene->clear();
+    Socket::getInstance().envioEscucho(mensaje,8080,"192.168.0.111");
+    sleep(1);
+    string recibo = Socket::getInstance().envioEscucho(mensaje, 8080, "192.168.0.111");
+    qDebug()<<recibo.c_str()<<"GRAFICO RECIBIDO";
+    serial::getInstance().deserializarGrafico(recibo,&grafico1,&grafico2);
+    QtCharts::QBarSet *set0 = new QtCharts::QBarSet("poblacion1");
+
+    string numeros = "1,100,3,4";
+    istringstream iss(numeros);
+    string item;
+    for (int i = 0;i<2;i++) {
+        string numeros = grafico1;
+        int numerosInt;
+        istringstream iss(numeros);
+        string item;
+        while(getline(iss, item, ',')){
+        numerosInt = stoi(item,nullptr, 10);
+        *set0<< numerosInt;
+        }
+    }
+    QtCharts::QBarSet *set1 = new QtCharts::QBarSet("poblacion2");
+
+    for (int i = 0;i<2;i++) {
+        string numeros = grafico2;
+        int numerosInt;
+        istringstream iss(numeros);
+        string item;
+        while(getline(iss, item, ',')){
+        numerosInt = stoi(item,nullptr, 10);
+        *set0<< numerosInt;
+        }
+    }
+    QtCharts::QBarSeries *series = new QtCharts::QBarSeries();
+    series->append(set0);
+    QChart *chart = new QChart();
+        chart->addSeries(series);
+        chart->setTitle("Avance de las generaciones");
+        chart->setAnimationOptions(QChart::SeriesAnimations);
+        QStringList categories;
+            categories << "gen";
+            categories<< "gen";
+            categories<< "gen" << "gen" << "gen" << "gen";
+            QBarCategoryAxis *axisX = new QBarCategoryAxis();
+            axisX->append(categories);
+            chart->addAxis(axisX, Qt::AlignBottom);
+            series->attachAxis(axisX);
+
+            QValueAxis *axisY = new QValueAxis();
+            axisY->setRange(0,100);
+            chart->addAxis(axisY, Qt::AlignLeft);
+            series->attachAxis(axisY);
+            chart->legend()->setVisible(true);
+                chart->legend()->setAlignment(Qt::AlignBottom);
+                QChartView *chartView = new QChartView(chart);
+                chartView->setRenderHint(QPainter::Antialiasing);
+                scene->clear();
+                scene->addItem(chart);
+
+
+
+   // scene->clear();
 
 
 }

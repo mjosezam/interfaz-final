@@ -1,7 +1,7 @@
 #include "sockets.h"
 #define PORT 8080
 
-int Socket::turno = 1;
+int Socket::turno = 3;
 int Socket::vida = 0;
 bool Socket::play = true;
 Socket::Socket()
