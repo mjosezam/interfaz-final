@@ -1,0 +1,12 @@
+<RCC>
+    <qresource prefix="/images">
+        <file>game.png</file>
+        <file>inicio.png</file>
+        <file>TorreExplosiva.png</file>
+        <file>TorreFuego.png</file>
+        <file>TorreSimple.png</file>
+        <file>try.png</file>
+        <file>try1.png</file>
+        <file>gladiator.png</file>
+    </qresource>
+</RCC>
