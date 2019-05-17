@@ -30,9 +30,8 @@ void MyPlayer::moveArr(int arr[30][2]){
                 qDebug()<<"Iteracion 3";
 
                 if (Game::getInstance().player==Game::getInstance().player1){
-                    string enviar=serial::getInstance().serializarTurno(Socket::getInstance().play,Socket::getInstance().turno,false);
-                    qDebug()<<"PASA POR SOCKET"<<endl;
-                    recibido = Socket::getInstance().envioEscucho(enviar, 8080, "192.168.0.111");
+                    string enviar=serial::getInstance().serializarTurno(true,Socket::getInstance().turno,false);
+                    recibido = Socket::getInstance().envioEscucho(enviar,8080,"192.168.0.111");
                     cout<<"A* jugando"<<endl;
                 }else{
                     string enviar = serial::getInstance().serializarTurno(true,Socket::getInstance().turno,true);
@@ -44,15 +43,15 @@ void MyPlayer::moveArr(int arr[30][2]){
 
                 Game::getInstance().player->setPos((ubicacion[0]+1)*60,(ubicacion[1]+1)*60);
 
-                if((arr[1][0]==9 && arr[1][1]==9) || (arr[2][0]==9 && arr[2][1]==9)){
-                    Socket::getInstance().play = false;
-                    qDebug()<<"GAME OVER";
-                    break;
-                }
+//                if(arr[1][0]==9 && arr[1][1]==9 && Game::getInstance().player->vida>0){
+//                    Socket::getInstance().play = false;
+//                    qDebug()<<"GAME OVER";
+//                    break;
+//                }
                 if (Game::getInstance().player->vida <= 0){
                     qDebug()<<"MURIO EL PLAYER";
                     string envio = serial::getInstance().serializarTurno(true,Socket::getInstance().turno,false);
-                    //Socket::getInstance().envioEscucho(envio,8080,"192.168.0.111");
+                    Socket::getInstance().envioEscucho(envio,8080,"192.168.0.111");
                     return;
                 }
                 for(int i=0;i<10;i++){
